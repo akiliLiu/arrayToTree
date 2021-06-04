@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>45646513</div>
+
+</body>
+<script>
+
+    let arr = [
+        {
+            "node_id": 1,
+            "parent_id": 0,
+            "name": '张三'
+        },
+        {
+            "node_id": 2,
+            "parent_id": 0,
+            "name": '里斯'
+        },
+        {
+            "node_id": 3,
+            "parent_id": 1,
+            "name": '阿斯顿'
+        },
+        {
+            "node_id": 7,
+            "parent_id": 1,
+            "name": '十分大'
+        },
+        {
+            "node_id": 6,
+            "parent_id": 7,
+            "name": '阿松大'
+        },
+        {
+            "node_id": 5,
+            "parent_id": 7,
+            "name": '十大'
+        },{
+            "node_id": 8,
+            "parent_id": 2,
+            "name": '十大的'
+        },
+    ]
+    
+    let dataObjById = {};
+    arr.map((item,index)=>{
+        dataObjById[item['node_id']] = item
+    })
+
+    function getTreeData(dataArr) {
+
+        let result = [];
+
+        // 遍历dataArr
+        dataArr.map((item,index)=>{
+            // 根据每一个对象的parent_id，获取父节点对象
+            var parentNode = dataObjById[item['parent_id']];
+            // 如果父节点对象不存在，就是根节点
+            if (parentNode) {
+                // 父节点对象存在，则插入子节点对象
+                if (!parentNode['children']) {
+                    parentNode['children'] = [];
+                }
+                parentNode['children'].push(item);
+
+                // 最后一级数据处理
+                let childrenArr = parentNode['children'];
+                childrenArr.map((item2,index2)=>{
+                    if (!item2.children) {
+                        item2.children = [];
+                        let { node_id, name, parent_id} = parentNode
+                        item2.parent = { node_id, name, parent_id}
+                    }
+                })
+
+                // 插入parentNode的父节点对象
+                if (dataObjById[parentNode['parent_id']]) {
+                    let { node_id, name, parent_id} = dataObjById[parentNode['parent_id']]
+                    parentNode.parent = { node_id, name, parent_id}
+                } else {
+                    parentNode.parent = {}
+                }
+            } else {
+                result.push(item);
+            }
+        })
+
+        // 仅一个一级节点，加children = []，parent = {}
+        result.map((item3,index3)=>{
+            if (!item3.children) {
+                item3.children = [];
+                item3.parent = {}
+            }
+        })
+        console.log(result)
+        return result;
+    }
+
+
+    getTreeData(arr)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // let params = [];
+    // let newParams1 = [];
+    // let newParams2 = [];
+    // for (let i = 0; i <arr.length ; i++) {
+    //     params.push(arr[i].p_id);
+    //
+    // }
+    // let newParams = [...new Set(params)];
+    // // console.log(newParams,"newParams")
+    //
+    // for (let j = 0; j < newParams.length; j++) {
+    //     newParams1.push({id:newParams[j],chi:[]})
+    // }
+    //
+    //
+    // for (let n = 0; n<newParams1.length ; n++) {
+    //     for (let i = 0; i <arr.length; i++) {
+    //         if (newParams1[n].id == arr[i].id){
+    //             newParams1[n].name = arr[i].name
+    //         }
+    //         if (newParams1[n].id==arr[i].p_id){
+    //             newParams1[n].chi.push(arr[i])
+    //         }
+    //     }
+    // }
+    //
+    //
+    // console.log(newParams1,"newParams1")
+
+
+
+</script>
+</html>
